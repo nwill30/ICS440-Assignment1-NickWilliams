@@ -1,4 +1,3 @@
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class RequestProcessor implements Runnable {
@@ -30,27 +29,31 @@ public class RequestProcessor implements Runnable {
 
     private void ProcessCollection() {
         Integer processUnit;
-        collectionLock.lock();
-        try {
-            if(this.collection.getHead()==null){
-                processUnit = -1;
-            }else{
-                processUnit =  (Integer) this.collection.returnHead();
+        boolean process = true;
+        while(process) {
+            collectionLock.lock();
+            try {
+                if (this.collection.getHead() == null) {
+                    processUnit = -1;
+                } else {
+                    processUnit = (Integer) this.collection.returnHead();
+                }
+            } finally {
+                collectionLock.unlock();
             }
-        }finally {
-            collectionLock.unlock();
-        }
-        if(processUnit >0){
-            CountUnit(processUnit);
-        }else{
-            //complete thread
+            if (processUnit > 0) {
+                CountUnit(processUnit);
+
+            } else {
+                process = false;
+            }
         }
     }
 
     private void CountUnit(Integer processUnit) {
         threadStatisticsLock.lock();
         try{
-            threadPrivate.get().set(processUnit, (Integer) threadPrivate.get().get(processUnit) + 1);
+            threadPrivate.get().setIndexValue(processUnit, (Integer) threadPrivate.get().getIndexValue(processUnit).getNode() + 1);
         }finally {
             threadStatisticsLock.unlock();
         }

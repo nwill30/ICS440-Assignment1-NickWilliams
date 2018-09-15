@@ -73,7 +73,7 @@ public class Queue<I extends Object> {
         return size;
     }
 
-    public void set(Integer index, Integer value) {
+    public void setIndexValue(Integer index, Integer value) {
         if(this.size == 0 || index >= this.size){
             throw new IndexOutOfBoundsException();
         }else{
@@ -90,12 +90,12 @@ public class Queue<I extends Object> {
     }
 
 
-    public Object get(Integer index) {
+    public QueueObject getIndexValue(Integer index) {
         if(this.size == 0 || index >= this.size){
             throw new IndexOutOfBoundsException();
         }else{
-            Object returnObject = null;
-            Object searchObject = this.head;
+            QueueObject returnObject = null;
+            QueueObject searchObject = this.head;
             for(int i = 0; i < this.size;i++){
                 if(i == index){
                     returnObject = searchObject;
