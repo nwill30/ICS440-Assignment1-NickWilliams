@@ -1,6 +1,11 @@
 public class QueueObject {
 
     private QueueObject head;
+
+    public void setNode(Object node) {
+        this.node = node;
+    }
+
     private Object node;
     private QueueObject tail;
 
