@@ -1,13 +1,12 @@
 public class QueueObject {
 
     private QueueObject head;
+    private Object node;
+    private QueueObject tail;
 
     public void setNode(Object node) {
         this.node = node;
     }
-
-    private Object node;
-    private QueueObject tail;
 
     public QueueObject(Object node){
         this.node = node;
@@ -45,6 +44,14 @@ public class QueueObject {
 
     public Object getNode() {
         return node;
+    }
+
+    public boolean hasTail(){
+        boolean check = true;
+        if(tail == null){
+            check = false;
+        }
+        return check;
     }
 
 }

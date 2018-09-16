@@ -35,29 +35,33 @@ public class Queue<I extends Object> {
     }
 
 
-    public void dequeue(Object node ){
-        QueueObject searchNode = this.head;
-        for(int i = 0;i<this.size;i++){
-            if(searchNode.getNode() == node){
-                remove(searchNode);
-                break;
-            }else{
-                searchNode = searchNode.getTail();
-            }
+    public void dequeue(){
+
+        if(head.hasTail()){
+            QueueObject newHead = head.getTail();
+            head = newHead;
+            head.setHead(null);
+        }else{
+            head = null;
         }
     }
 
     private void remove(QueueObject searchNode) {
         QueueObject tempHead = searchNode.getHead();
         QueueObject tempTail = searchNode.getTail();
-        tempHead.setTail(searchNode.getTail());
-        tempTail.setHead(searchNode.getHead());
+        if(tempHead == null){
+            tempTail.setHead(null);
+            this.head = tempTail;
+        }else {
+            tempHead.setTail(searchNode.getTail());
+            tempTail.setHead(searchNode.getHead());
+        }
 
     }
 
-    public Object returnHead() {
-        Object returnHead = head.getNode();
-        dequeue(head);
+    public QueueObject getHeadAndDequeue() {
+        QueueObject returnHead = head;
+        dequeue();
         return returnHead;
     }
 
@@ -81,6 +85,7 @@ public class Queue<I extends Object> {
             for(int i = 0; i < this.size;i++){
                 if(i == index){
                     ((QueueObject) searchObject).setNode(value);
+                    break;
                 }else{
                     searchObject = ((QueueObject) searchObject).getTail();
                 }
@@ -99,6 +104,7 @@ public class Queue<I extends Object> {
             for(int i = 0; i < this.size;i++){
                 if(i == index){
                     returnObject = searchObject;
+                    break;
                 }else{
                     searchObject = ((QueueObject) searchObject).getTail();
                 }

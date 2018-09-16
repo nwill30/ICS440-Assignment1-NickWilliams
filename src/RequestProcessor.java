@@ -5,29 +5,31 @@ public class RequestProcessor implements Runnable {
     private Queue<Integer> collection;
     private ReentrantLock collectionLock = new ReentrantLock();
     private ReentrantLock threadStatisticsLock = new ReentrantLock();
-    private ThreadStatisticsSetup threadStatistics;
+    private ThreadStatisticsSetup threadStatistics = new ThreadStatisticsSetup();
     private ThreadLocal<Queue> threadPrivate;
 
 
     @Override
     public void run() {
-        ThreadID.get();
+        System.out.println(Thread.currentThread().getName());
+        threadPrivate = new ThreadLocal<>();
         threadStatisticsLock.lock();
         try{
             threadPrivate.set(threadStatistics.createThreadPrivate());
         }finally {
             threadStatisticsLock.unlock();
         }
+
         ProcessCollection();
     }
 
     public RequestProcessor(Queue<Integer> collection) {
         this.collection = collection;
-        threadStatistics = new ThreadStatisticsSetup();
+
     }
 
 
-    private void ProcessCollection() {
+    private synchronized void ProcessCollection() {
         Integer processUnit;
         boolean process = true;
         while(process) {
@@ -36,12 +38,13 @@ public class RequestProcessor implements Runnable {
                 if (this.collection.getHead() == null) {
                     processUnit = -1;
                 } else {
-                    processUnit = (Integer) this.collection.returnHead();
+                    processUnit = (Integer) collection.getHeadAndDequeue().getNode();
                 }
             } finally {
                 collectionLock.unlock();
             }
-            if (processUnit > 0) {
+            if (processUnit >= 0) {
+//                System.out.println(Thread.currentThread().getName() + " count : " + processUnit);
                 CountUnit(processUnit);
 
             } else {
@@ -51,11 +54,9 @@ public class RequestProcessor implements Runnable {
     }
 
     private void CountUnit(Integer processUnit) {
-        threadStatisticsLock.lock();
-        try{
+
             threadPrivate.get().setIndexValue(processUnit, (Integer) threadPrivate.get().getIndexValue(processUnit).getNode() + 1);
-        }finally {
-            threadStatisticsLock.unlock();
-        }
+            threadPrivate.get().setIndexValue(5, (Integer) threadPrivate.get().getIndexValue(5).getNode() + 1);
+
     }
 }
