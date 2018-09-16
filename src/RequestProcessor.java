@@ -19,15 +19,12 @@ public class RequestProcessor implements Runnable {
         } finally {
             threadStatisticsLock.unlock();
         }
-
         ProcessCollection();
     }
 
     public RequestProcessor(Queue<Integer> collection) {
         this.collection = collection;
-
     }
-
 
     private synchronized void ProcessCollection() {
         Integer processUnit;
@@ -58,8 +55,12 @@ public class RequestProcessor implements Runnable {
         try {
             threadPrivate.get().setIndexValue(processUnit, (Integer) threadPrivate.get().getIndexValue(processUnit).getNode() + 1);
         } catch (NullPointerException e) {
-            System.out.println("Thread: " + Thread.currentThread().getName() + "");
+            System.out.println("Thread: " + Thread.currentThread().getName() + " Null pointer store procces unit " +processUnit );
         }
-        threadPrivate.get().setIndexValue(5, (Integer) threadPrivate.get().getIndexValue(5).getNode() + 1);
+        try {
+            threadPrivate.get().setIndexValue(5, (Integer) threadPrivate.get().getIndexValue(5).getNode() + 1);
+        }catch (NullPointerException e){
+            System.out.println("Thread: "+ Thread.currentThread().getName() + " Null pointer incrament index 5");
+        }
     }
 }
