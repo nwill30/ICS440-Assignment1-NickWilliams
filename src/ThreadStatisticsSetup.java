@@ -29,16 +29,15 @@ public class ThreadStatisticsSetup {
         String[] colors = {"Red","Brown","Yellow","Green","Blue"};
         for (int i = 0; i < queueCollection.getSize(); i++) {
             Queue<Integer> privateQueue = (Queue) queueCollection.getHeadAndDequeue().getNode();
+            totalCount = totalCount + (Integer) privateQueue.getTail().getNode();
             for (int j = 0; j < privateQueue.getSize()-1; j++) {
                 Integer colorCount = (Integer) privateQueue.getHeadAndDequeue().getNode();
                 double colorStats = CalculateStatistics(colorCount, (Integer) privateQueue.getTail().getNode());
                 System.out.println(String.format("Tabulator: %s Count %s for color %s = %s",i, colorCount.toString(),colors[j], colorStats+""));
-                totalCount = totalCount + (Integer) privateQueue.getTail().getNode();
                 colorTotals[j] = colorTotals[j] + colorCount;
             }
-            System.out.println("Processed thread" + i);
         }
-
+        System.out.println("Total Count " + totalCount );
         System.out.println("Color "+colors[0]+" composes " + CalculateStatistics(colorTotals[0], totalCount) + "% of the total");
         System.out.println("Color "+colors[1]+" composes " + CalculateStatistics(colorTotals[1], totalCount) + "% of the total");
         System.out.println("Color "+colors[2]+" composes " + CalculateStatistics(colorTotals[2], totalCount) + "% of the total");

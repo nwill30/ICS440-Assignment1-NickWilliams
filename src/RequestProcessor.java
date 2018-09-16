@@ -14,9 +14,9 @@ public class RequestProcessor implements Runnable {
         System.out.println(Thread.currentThread().getName());
         threadPrivate = new ThreadLocal<>();
         threadStatisticsLock.lock();
-        try{
+        try {
             threadPrivate.set(threadStatistics.createThreadPrivate());
-        }finally {
+        } finally {
             threadStatisticsLock.unlock();
         }
 
@@ -32,7 +32,7 @@ public class RequestProcessor implements Runnable {
     private synchronized void ProcessCollection() {
         Integer processUnit;
         boolean process = true;
-        while(process) {
+        while (process) {
             collectionLock.lock();
             try {
                 if (this.collection.getHead() == null) {
@@ -55,8 +55,11 @@ public class RequestProcessor implements Runnable {
 
     private void CountUnit(Integer processUnit) {
 
+        try {
             threadPrivate.get().setIndexValue(processUnit, (Integer) threadPrivate.get().getIndexValue(processUnit).getNode() + 1);
-            threadPrivate.get().setIndexValue(5, (Integer) threadPrivate.get().getIndexValue(5).getNode() + 1);
-
+        } catch (NullPointerException e) {
+            System.out.println("Thread: " + Thread.currentThread().getName() + "");
+        }
+        threadPrivate.get().setIndexValue(5, (Integer) threadPrivate.get().getIndexValue(5).getNode() + 1);
     }
 }
