@@ -5,8 +5,8 @@ public class Queue<I extends Object> {
     private QueueObject tail;
     private Integer size;
 
-    public Queue( Object newNode){
-        this.head = new QueueObject(newNode,null);
+    public Queue(Object newNode) {
+        this.head = new QueueObject(newNode, null);
         this.tail = this.head;
         this.size = 0;
     }
@@ -16,32 +16,32 @@ public class Queue<I extends Object> {
     }
 
 
-    public void enqueue(Object newNode){
-        if(this.size == 0){
-            this.head = new QueueObject(newNode,null);
+    public void enqueue(Object newNode) {
+        if (this.size == 0) {
+            this.head = new QueueObject(newNode, null);
             this.tail = this.head;
             this.size++;
-        }else{
+        } else {
             add(newNode, this.tail);
             this.size++;
         }
 
     }
 
-    private void add(Object newNode, QueueObject head){
+    private void add(Object newNode, QueueObject head) {
         QueueObject node = new QueueObject(newNode, head);
         this.tail.setTail(node);
         this.tail = node;
     }
 
 
-    public void dequeue(){
+    public void dequeue() {
 
-        if(head.hasTail()){
+        if (head.hasTail()) {
             QueueObject newHead = head.getTail();
             head = newHead;
             head.setHead(null);
-        }else{
+        } else {
             head = null;
         }
     }
@@ -49,10 +49,10 @@ public class Queue<I extends Object> {
     private void remove(QueueObject searchNode) {
         QueueObject tempHead = searchNode.getHead();
         QueueObject tempTail = searchNode.getTail();
-        if(tempHead == null){
+        if (tempHead == null) {
             tempTail.setHead(null);
             this.head = tempTail;
-        }else {
+        } else {
             tempHead.setTail(searchNode.getTail());
             tempTail.setHead(searchNode.getHead());
         }
@@ -78,15 +78,15 @@ public class Queue<I extends Object> {
     }
 
     public void setIndexValue(Integer index, Integer value) {
-        if(this.size == 0 || index >= this.size){
+        if (this.size == 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
-        }else{
+        } else {
             Object searchObject = this.head;
-            for(int i = 0; i < this.size;i++){
-                if(i == index){
+            for (int i = 0; i < this.size; i++) {
+                if (i == index) {
                     ((QueueObject) searchObject).setNode(value);
                     break;
-                }else{
+                } else {
                     searchObject = ((QueueObject) searchObject).getTail();
                 }
             }
@@ -96,20 +96,34 @@ public class Queue<I extends Object> {
 
 
     public QueueObject getIndexValue(Integer index) {
-        if(this.size == 0 || index >= this.size){
+        if (this.size == 0 || index >= this.size) {
             throw new IndexOutOfBoundsException();
-        }else{
+        } else {
             QueueObject returnObject = null;
             QueueObject searchObject = this.head;
-            for(int i = 0; i < this.size;i++){
-                if(i == index){
+            for (int i = 0; i < this.size; i++) {
+                if (i == index) {
                     returnObject = searchObject;
                     break;
-                }else{
+                } else {
                     searchObject = ((QueueObject) searchObject).getTail();
                 }
             }
             return returnObject;
         }
+    }
+
+    public void setValue(String name, I queue) {
+
+        Object searchObject = this.head;
+        for (int i = 0; i < this.size; i++) {
+            if (((QueueObject) searchObject).getNode().equals(name)) {
+                ((QueueObject) searchObject).setNode(queue);
+                break;
+            } else {
+                searchObject = ((QueueObject) searchObject).getTail();
+            }
+        }
+
     }
 }

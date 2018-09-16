@@ -6,14 +6,12 @@ public class ThreadStatisticsSetup {
         queueCollection = new Queue<>();
     }
 
+    public void add(String name) {
+        queueCollection.enqueue(name);
+    }
 
-    public Queue createThreadPrivate(){
-        Queue privateQueue = new Queue();
-        for(int collectionSize = 0; collectionSize <= 5; collectionSize++){
-            privateQueue.enqueue(0);
-        }
-        queueCollection.enqueue(privateQueue);
-        return privateQueue;
+    public void replaceNode(String name, Queue queue) {
+        queueCollection.setValue(name, queue);
     }
 
     private static double CalculateStatistics(Integer colorQueue, Integer totalQueue) {
@@ -28,7 +26,7 @@ public class ThreadStatisticsSetup {
         Integer[] colorTotals = {0,0,0,0,0};
         String[] colors = {"Red","Brown","Yellow","Green","Blue"};
         for (int i = 0; i < queueCollection.getSize(); i++) {
-            Queue<Integer> privateQueue = (Queue) queueCollection.getHeadAndDequeue().getNode();
+            Queue<Integer> privateQueue = (Queue)queueCollection.getHeadAndDequeue().getNode();
             totalCount = totalCount + (Integer) privateQueue.getTail().getNode();
             for (int j = 0; j < privateQueue.getSize()-1; j++) {
                 Integer colorCount = (Integer) privateQueue.getHeadAndDequeue().getNode();
@@ -37,6 +35,7 @@ public class ThreadStatisticsSetup {
                 colorTotals[j] = colorTotals[j] + colorCount;
             }
         }
+
         System.out.println("Total Count " + totalCount );
         System.out.println("Color "+colors[0]+" composes " + CalculateStatistics(colorTotals[0], totalCount) + "% of the total");
         System.out.println("Color "+colors[1]+" composes " + CalculateStatistics(colorTotals[1], totalCount) + "% of the total");
@@ -45,6 +44,7 @@ public class ThreadStatisticsSetup {
         System.out.println("Color "+colors[4]+" composes " + CalculateStatistics(colorTotals[4], totalCount) + "% of the total");
 
     }
+
 
 
 }
