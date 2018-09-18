@@ -1,7 +1,18 @@
-
+/**
+ * ICS40 Assignment 1 Multi-thread M&M counter with supplied driver main class
+ * Creates collection of n integers 0-5 representing M&M colors (Red, Brown, Yellow, Green, Blue)
+ * Passes collection to RequestProcessor to calculate the occurrence of each color
+ * The RequestProcessor class can run n threads to complete the computations on the single collection
+ *
+ * @author  Nick Williams
+ * @since   2018-09-16
+ */
 public class Main {
 
     public static void main(String[] args) {
+        /**
+         * Supplied driver method by assignment, no edits made...
+         * */
         Queue<Integer> collection = new Queue<Integer>();
         for (int index = 0; index < 10000; index++) {
             int candidate = ((int) (Math.random() * 10000)) % 5;
@@ -24,13 +35,5 @@ public class Main {
         }
         ThreadStatisticsSetup.print();
     }
-
-//    String input = "This is a string list";
-//        String[] inputLIst = input.split(" ");
-//        Queue list = new Queue(inputLIst[0]);
-//        for(int i = 1;i<5;i++){
-//            list.enqueue(inputLIst[i]);
-//        }
-
 
 }
